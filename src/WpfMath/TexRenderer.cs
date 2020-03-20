@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -46,8 +46,11 @@ namespace WpfMath
             }
         }
 
-        public void RenderFormulaTo(IElementRenderer renderer, double x, double y) =>
+        public void RenderFormulaTo(IElementRenderer renderer, double x, double y)
+        {
             renderer.RenderElement(Box, x / Scale, y / Scale + Box.Height);
+            renderer.FinishRendering();
+        }
 
         public Geometry RenderToGeometry(double x, double y)
         {
@@ -79,8 +82,8 @@ namespace WpfMath
             this.RenderWithPositiveCoordinates(visual, x, y);
 
             var bounds = visual.ContentBounds;
-            var width = (int)Math.Ceiling(bounds.Right * dpi / DefaultDpi);
-            var height = (int)Math.Ceiling(bounds.Bottom * dpi / DefaultDpi);
+            var width = (int)Math.Ceiling((bounds.Right + x) * dpi / DefaultDpi);
+            var height = (int)Math.Ceiling((bounds.Bottom + y) * dpi / DefaultDpi);
             var bitmap = new RenderTargetBitmap(width, height, dpi, dpi, PixelFormats.Default);
             bitmap.Render(visual);
 
